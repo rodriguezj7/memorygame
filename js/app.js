@@ -2,7 +2,6 @@
  * Create a list that holds all of your cards
  */
 const deck = document.getElementById("deck");
-var cards = deck.childNodes;
 var allCards = ['fa fa-diamond', 'fa fa-paper-plane-o', 'fa fa-anchor','fa fa-bolt','fa fa-cube', 'fa fa-anchor', 'fa fa-leaf','fa fa-bicycle', 'fa fa-diamond', 'fa fa-bomb', 'fa fa-leaf',
 'fa fa-bomb', 'fa fa-bolt', 'fa fa-bicycle', 'fa fa-paper-plane-o','fa fa-cube'];
 var scoreCount = document.getElementsByClassName("score-panel");
@@ -19,6 +18,12 @@ var cardInfo = function(index, array){
 	cardType.setAttribute("class", array[x]);
 	}
  }
+ cardInfo.prototype.showCard = function(event){
+ 	let flip =  event.target.setAttribute("class", "card open show");
+ 	let currentCard = event.target.children[0];
+	currentCard = currentCard.getAttribute('class');
+	return currentCard;
+ };
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -43,7 +48,7 @@ function newBoard(cards, array){
 		firstNode = deck.firstChild;
 	}
 	//call and build new cards
-	cardInfo(cards, array);
+	let newGame = new cardInfo(cards, array);
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -70,9 +75,9 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-cards.forEach(function(){
-	cards.addEventListener("click", function(e){
-		x = iele.className;
-		console.log(x);
-	});
-})
+deck.addEventListener("click", function(event){
+	let currentCard = cardInfo.prototype.showCard(event);
+	// currentCard.setAttribute("class", )
+	console.log('target:', event.target.getAttribute('class'));
+});
+
