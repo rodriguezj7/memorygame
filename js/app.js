@@ -1,12 +1,15 @@
 /*
  * Create a list that holds all of your cards
  */
+let openList = [];
 const deck = document.getElementById("deck");
 var allCards = ['fa fa-diamond', 'fa fa-paper-plane-o', 'fa fa-anchor','fa fa-bolt','fa fa-cube', 'fa fa-anchor', 'fa fa-leaf','fa fa-bicycle', 'fa fa-diamond', 'fa fa-bomb', 'fa fa-leaf',
 'fa fa-bomb', 'fa fa-bolt', 'fa fa-bicycle', 'fa fa-paper-plane-o','fa fa-cube'];
 var scoreCount = document.getElementsByClassName("score-panel");
 var starScore = '<li><i class="fa fa-star"></i></li>';
 var repeat = document.getElementById("restart");
+let flippedCards = [];
+let matchedCards = 0;
 //build card
 var cardInfo = function(index, array){
 	for(let x = 0; x < index; x++){
@@ -18,11 +21,21 @@ var cardInfo = function(index, array){
 	cardType.setAttribute("class", array[x]);
 	}
  }
- cardInfo.prototype.showCard = function(event){
+ cardInfo.prototype.methods ={
+ 	showCard : function(event){
  	let flip =  event.target.setAttribute("class", "card open show");
  	let currentCard = event.target.children[0];
 	currentCard = currentCard.getAttribute('class');
 	return currentCard;
+	},
+	addToList: function(target){
+	let card = target.firstChild.getAttribute("class");
+	flippedCards.push(card);
+	},
+	matchCard: function(event){
+	let match =  event.target.setAttribute("class", "card match");
+	return match;
+	}
  };
 /*
  * Display the cards on the page
@@ -32,6 +45,7 @@ var cardInfo = function(index, array){
  */
 // repeat game or restart
 repeat.addEventListener("click", function(){
+	openList =[];
 	//new shuffle
 	let newShuffle = shuffle(allCards);
 	newBoard(16, newShuffle);
@@ -65,6 +79,7 @@ function shuffle(array) {
 
     return array;
 }
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -75,9 +90,19 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-deck.addEventListener("click", function(event){
-	let currentCard = cardInfo.prototype.showCard(event);
-	// currentCard.setAttribute("class", )
-	console.log('target:', event.target.getAttribute('class'));
+deck.addEventListener("click", function(e){
+    let target = e.target; // Clicked element
+    targetChild = target.children[0].getAttribute("class");
+
+	if(target.tagName === 'LI'){
+		cardInfo.prototype.methods.showCard(e);
+		cardInfo.prototype.methods.addToList(target);
+		console.log(target.firstChild.getAttribute("class"));
+		console.log(flippedCards);
+	}
+	// console.log(target);
+	// console.log(targetChild);
+	// console.log(flippedCards);
+	// console.log('target:', event.target.getAttribute('class'));
 });
 
