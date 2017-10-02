@@ -1,42 +1,34 @@
 /*
  * Create a list that holds all of your cards
  */
-let openList = [];
-const deck = document.getElementById("deck");
+const deck = $(".deck");
 var allCards = ['fa fa-diamond', 'fa fa-paper-plane-o', 'fa fa-anchor','fa fa-bolt','fa fa-cube', 'fa fa-anchor', 'fa fa-leaf','fa fa-bicycle', 'fa fa-diamond', 'fa fa-bomb', 'fa fa-leaf',
 'fa fa-bomb', 'fa fa-bolt', 'fa fa-bicycle', 'fa fa-paper-plane-o','fa fa-cube'];
-var scoreCount = document.getElementsByClassName("score-panel");
-var starScore = '<li><i class="fa fa-star"></i></li>';
-var repeat = document.getElementById("restart");
+var repeat = $(".restart");
+let score = $(".stars");
+let star = '<li><i class="fa fa-star"></i></li>';
 let flippedCards = [];
 let matchedCards = 0;
+let movesMade = 0;
+let currentTarget;
+let cardOne;
+let cardTwo;
 //build card
-var cardInfo = function(index, array){
-	for(let x = 0; x < index; x++){
-	let cardHTML = document.createElement("li");
-	let cardType = document.createElement('i')
-	deck.appendChild(cardHTML);
-	cardHTML.setAttribute("class", "card");
-	cardHTML.appendChild(cardType);
-	cardType.setAttribute("class", array[x]);
-	}
+var cardInfo = function(){
+	let newShuffle = shuffle(allCards);
+	newShuffle.forEach(function(classCard) {
+	let card = '<li class="card"><i class="' + classCard + '"></i></li>'; // creates a html for adding the cards to the class deck
+	  deck.append(card); // adds the card to the html class deck
+	 });
+	console.log(newShuffle);
  }
- cardInfo.prototype.methods ={
- 	showCard : function(event){
- 	let flip =  event.target.setAttribute("class", "card open show");
- 	let currentCard = event.target.children[0];
-	currentCard = currentCard.getAttribute('class');
-	return currentCard;
-	},
-	addToList: function(target){
-	let card = target.firstChild.getAttribute("class");
-	flippedCards.push(card);
-	},
-	matchCard: function(event){
-	let match =  event.target.setAttribute("class", "card match");
-	return match;
-	}
- };
+// Create new board
+function newBoard(cards, array){
+	//clear board
+	 $('.deck').empty();
+	//call and build new cards
+	let newGame = new cardInfo();
+}
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -44,26 +36,12 @@ var cardInfo = function(index, array){
  *   - add each card's HTML to the page
  */
 // repeat game or restart
-repeat.addEventListener("click", function(){
-	openList =[];
+repeat.click(function(){
 	//new shuffle
-	let newShuffle = shuffle(allCards);
-	newBoard(16, newShuffle);
-	console.log(newShuffle);
-	console.log("Success!");
+	newBoard();
+	flippedCards.length = 0;
 });
 
-// Create new board
-function newBoard(cards, array){
-	//clear board
-	var firstNode = deck.firstChild;
-	while(firstNode){
-		deck.removeChild(firstNode);
-		firstNode = deck.firstChild;
-	}
-	//call and build new cards
-	let newGame = new cardInfo(cards, array);
-}
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -80,6 +58,43 @@ function shuffle(array) {
     return array;
 }
 
+function gameWin(){
+	if(matchedCards == 8){
+		console.log("You won!");
+	}
+
+}
+//matching cards
+function cardsMatch(card){
+
+	console.log("Cards match");
+	matchedCards++;
+}
+//cards do not match
+function noMatch(){
+	flippedCards.length = 0;
+}
+//rating
+var gameRating = function(){
+  if (movesMade <= 11) {
+   score.append(star + star + star);
+  } else if (movesMade > 11 && movesMade < 16) {
+   score.append(star + star);
+  } else if (movesCount >= 25) {
+   score.append(star);
+  }
+}
+function displayCard(card){
+	let currentTarget = $(card);
+	currentTarget.addClass("show open");
+	currentTarget.css("pointer-events", "none");
+}
+
+//add to List
+function addCard(card){
+	flippedCards.push(card.innerHTML);
+}
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -90,20 +105,46 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-deck.addEventListener("click", function(e){
-    let target = e.target; // Clicked element
-    targetChild = target.children[0].getAttribute("class");
 
-	if(target.tagName === 'LI'){
-		cardInfo.prototype.methods.showCard(e);
-		cardInfo.prototype.methods.addToList(target);
-		console.log(target.firstChild.getAttribute("class"));
-		console.log(flippedCards);
+
+$(document).on("click", ".card", function(){
+	let target = this;
+	console.log(target);
+	//display card
+	displayCard(target);
+	addCard(target);
+	if(flippedCards.length < 3){
+		cardsMatch(target);
+	} else {
+		noMatch();
 	}
+	gameRating();
+
+});
+
+if(flippedCards[0] == flippedCards[1]){ console.log("true"); } else { console.log("not true"); }
+	// displayCard(currentTarget);
+	// if (currentTarget.hasClass('.card') || currentTarget.hasClass('open show')) {
+ //           console.log((currentTarget).attr("class"));
+ //           displayCard();
+ //         } else {
+ //            return;
+ //         };
+
+// deck.addEventListener("click", function(e){
+//     let target = e.target; // Clicked element
+//     targetChild = target.children[0].getAttribute("class");
+
+// 	if(target.tagName === 'LI'){
+// 		cardInfo.prototype.methods.showCard(e);
+// 		cardInfo.prototype.methods.addToList(target);
+// 		console.log(target.firstChild.getAttribute("class"));
+// 		console.log(flippedCards);
+// 	}
 	// console.log(target);
 	// console.log(targetChild);
 	// console.log(flippedCards);
 	// console.log('target:', event.target.getAttribute('class'));
-});
+// });
 
 
