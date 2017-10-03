@@ -66,9 +66,19 @@ function gameWin(){
 }
 //matching cards
 function cardsMatch(card){
+	let target = $(card);
+	if(flippedCards.length > 1){
+		$(flippedCards[0]).addClass(" notmatch");
+		$(flippedCards[1]).addClass(" notmatch");
+	} else if((flippedCards[0].innerHTML) === (flippedCards[1].innerHTML)){
+		$(flippedCards[0]).addClass(" match").removeClass("notmatch");
+		$(flippedCards[1]).addClass(" match").removeClass("notmatch");
+		matchedCards++;
+		flippedCards.length = 0;
+	}else{
+		flippedCards.length = 0;
+	}
 
-	console.log("Cards match");
-	matchedCards++;
 }
 //cards do not match
 function noMatch(){
@@ -92,7 +102,7 @@ function displayCard(card){
 
 //add to List
 function addCard(card){
-	flippedCards.push(card.innerHTML);
+	flippedCards.push(card);
 }
 
 /*
