@@ -68,11 +68,12 @@ function gameWin(){
 function cardsMatch(card){
 	let target = $(card);
 	if(flippedCards.length > 1){
-		$(flippedCards[0]).addClass(" notmatch");
-		$(flippedCards[1]).addClass(" notmatch");
-	} else if((flippedCards[0].innerHTML) === (flippedCards[1].innerHTML)){
-		$(flippedCards[0]).addClass(" match").removeClass("notmatch");
-		$(flippedCards[1]).addClass(" match").removeClass("notmatch");
+		$(flippedCards[0]).addClass("notmatch");
+		$(flippedCards[1]).addClass("notmatch");
+	}
+	if(flippedCards[0].innerHTML === flippedCards[1].innerHTML){
+		$(flippedCards[0]).addClass("open show match").removeClass("notmatch");
+		$(flippedCards[1]).addClass("open show match").removeClass("notmatch");
 		matchedCards++;
 		flippedCards.length = 0;
 	}else{
@@ -102,7 +103,7 @@ function displayCard(card){
 
 //add to List
 function addCard(card){
-	flippedCards.push(card);
+	flippedCards.push(this);
 }
 
 /*
@@ -117,18 +118,18 @@ function addCard(card){
  */
 
 
-$(document).on("click", ".card", function(){
-	let target = this;
-	console.log(target);
+$(document).on("click", "li", function(){
+	console.log(this);
 	//display card
-	displayCard(target);
-	addCard(target);
-	if(flippedCards.length < 3){
+	displayCard(this);
+	addCard(this);
+	if(flippedCards.length >= 2){
 		cardsMatch(target);
-	} else {
-		noMatch();
 	}
-	gameRating();
+	// } else {
+	// 	noMatch();
+	// }
+	// gameRating();
 
 });
 
