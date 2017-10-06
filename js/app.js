@@ -87,7 +87,7 @@ function displayCard(card){
 
 //add to List
 function addCard(card){
-	flippedCards.push(this);
+	flippedCards.push(card);
 }
 
 
@@ -97,15 +97,14 @@ function addCard(card){
  // *  - if the list already has another card, check to see if the two cards match
  // *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
  function cardMatch(){
-		if(flippedCards[0].innerHTML === flippedCards[1].innerHTML){
 		matchedCards++;
-		 $(flippedCards).slice(0, 2).addClass('match');
+		$(flippedCards).slice(0, 2).addClass('match');
 		flippedCards.length = 0;
-		}
  }
  // *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- function noMatch(){
- 		$(flippedCards).slice(0, 2).addClass(' notmatch');
+ function noMatch(el){
+ 		let li = $(el);
+ 		$(flippedCards).slice(0, 2).addClass('notmatch');
 		flippedCards.length = 0;
  }
  // *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
@@ -119,11 +118,22 @@ $(document).on("click", "li", function(){
 	displayCard(this);
 	addCard(this);
 	console.log(flippedCards.length);
-	if(flippedCards.length === 2){
-		cardMatch();
-		} else{
-		noMatch();
-		}
+	//check if more than 1 card is in the array
+	if(flippedCards.length > 1){
+		//check if there are exactly 2 cards in the array
+		 if(flippedCards.length === 2){
+		 	//if both those cards are equal run the function inside
+			if(flippedCards[0].innerHTML === flippedCards[1].innerHTML){
+			cardMatch();
+			} else{
+			//run this function
+			noMatch(this);
+			}
+	} else{
+		//just display the current card
+		displayCard(this);
+	}
+}
 	movesMade++;
 	movesEl.text(movesMade);
 	winnerChickenDinner();
