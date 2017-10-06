@@ -125,10 +125,14 @@ $(document).on("click", "li", function(){
 			if(flippedCards[0].innerHTML === flippedCards[1].innerHTML){
 			cardMatch();
 			} else{
+			//else put notmatch class
 			$(flippedCards).slice(0, 2).addClass('notmatch');
+			//confirm both have this class and run function
+			if($(this).hasClass('notmatch') || $(this).hasClass('show open')){
 			//run this function
 			noMatch();
 			flippedCards.length = 0;
+			}
 			}
 	} else{
 		//just display the current card
