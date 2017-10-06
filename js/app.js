@@ -97,13 +97,22 @@ function addCard(card){
  // *  - if the list already has another card, check to see if the two cards match
  // *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
  function cardMatch(){
-		matchedCards++;
-		$(flippedCards).slice(0, 2).addClass('match').removeClass('notmatch');
-		flippedCards.length = 0;
+ 	if(flippedCards.length >= 2){
+ 		$(flippedCards).slice(0, 2).addClass('notmatch');
+ 	// if both those cards are equal run the function inside
+		if(flippedCards[0].innerHTML === flippedCards[1].innerHTML){
+			matchedCards++;
+			$(flippedCards).slice(0, 2).addClass('match').removeClass('notmatch');
+			flippedCards.length = 0;
+		}
+	}
  }
  // *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
  function noMatch(){
- 		$(flippedCards).slice(0, 2).removeClass('show open notmatch');
+ 	if($(flippedCards[0]).hasClass('show open notmatch') || $(flippedCards[1]).hasClass('show open notmatch')){
+		$(flippedCards).slice(0, 2).removeClass('show open notmatch').css("pointer-events", "all");
+ 		flippedCards.length = 0;
+	}
 
  }
  // *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
@@ -117,28 +126,13 @@ $(document).on("click", "li", function(){
 	displayCard(this);
 	addCard(this);
 	console.log(flippedCards.length);
-	//check if more than 1 card is in the array
-	if(flippedCards.length > 1){
 		//check if there are exactly 2 cards in the array
-		 if(flippedCards.length === 2){
-		 	//if both those cards are equal run the function inside
-			if(flippedCards[0].innerHTML === flippedCards[1].innerHTML){
+		 if(flippedCards.length >= 2){
+		 	noMatch();
+			} else {
 			cardMatch();
-			} else{
-			//else put notmatch class
-			$(flippedCards).slice(0, 2).addClass('notmatch');
-			//confirm both have this class and run function
-			if($(this).hasClass('notmatch') || $(this).hasClass('show open')){
-			//run this function
-			noMatch();
-			flippedCards.length = 0;
 			}
-			}
-	} else{
-		//just display the current card
-		displayCard(this);
-	}
-}
+	 setTimeout(cardMatch(),2000)
 	movesMade++;
 	winnerChickenDinner();
 });
