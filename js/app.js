@@ -98,14 +98,13 @@ function addCard(card){
  // *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
  function cardMatch(){
 		matchedCards++;
-		$(flippedCards).slice(0, 2).addClass('match');
+		$(flippedCards).slice(0, 2).addClass('match').removeClass('notmatch');
 		flippedCards.length = 0;
  }
  // *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- function noMatch(el){
- 		let li = $(el);
- 		$(flippedCards).slice(0, 2).addClass('notmatch');
-		flippedCards.length = 0;
+ function noMatch(){
+ 		$(flippedCards).slice(0, 2).removeClass('show open notmatch');
+
  }
  // *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  // *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
@@ -126,8 +125,10 @@ $(document).on("click", "li", function(){
 			if(flippedCards[0].innerHTML === flippedCards[1].innerHTML){
 			cardMatch();
 			} else{
+			$(flippedCards).slice(0, 2).addClass('notmatch');
 			//run this function
-			noMatch(this);
+			noMatch();
+			flippedCards.length = 0;
 			}
 	} else{
 		//just display the current card
@@ -135,7 +136,6 @@ $(document).on("click", "li", function(){
 	}
 }
 	movesMade++;
-	movesEl.text(movesMade);
 	winnerChickenDinner();
 });
 
