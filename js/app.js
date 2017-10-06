@@ -1,12 +1,15 @@
+"use strict";
 /*
  * Create a list that holds all of your cards
  */
 const deck = $(".deck");
+var cardCounter = 0;
 var allCards = ['fa fa-diamond', 'fa fa-paper-plane-o', 'fa fa-anchor','fa fa-bolt','fa fa-cube', 'fa fa-anchor', 'fa fa-leaf','fa fa-bicycle', 'fa fa-diamond', 'fa fa-bomb', 'fa fa-leaf',
 'fa fa-bomb', 'fa fa-bolt', 'fa fa-bicycle', 'fa fa-paper-plane-o','fa fa-cube'];
 var repeat = $(".restart");
 let score = $(".stars");
 let star = '<li><i class="fa fa-star"></i></li>';
+let movesEl = $(".moves");
 let flippedCards = [];
 let matchedCards = 0;
 let movesMade = 0;
@@ -28,6 +31,7 @@ function newBoard(cards, array){
 	 $('.deck').empty();
 	//call and build new cards
 	let newGame = new cardInfo();
+	flippedCards.length = 0;
 }
 /*
  * Display the cards on the page
@@ -39,7 +43,8 @@ function newBoard(cards, array){
 repeat.click(function(){
 	//new shuffle
 	newBoard();
-	flippedCards.length = 0;
+	movesMade = 0;
+	movesEl.text(movesMade);
 });
 
 
@@ -58,33 +63,13 @@ function shuffle(array) {
     return array;
 }
 
-function gameWin(){
-	if(matchedCards == 8){
+function winnerChickenDinner(){
+	if(matchedCards === 8){
 		console.log("You won!");
 	}
 
 }
-//matching cards
-function cardsMatch(card){
-	let target = $(card);
-	if(flippedCards.length > 1){
-		$(flippedCards[0]).addClass("notmatch");
-		$(flippedCards[1]).addClass("notmatch");
-	}
-	if(flippedCards[0].innerHTML === flippedCards[1].innerHTML){
-		$(flippedCards[0]).addClass("open show match").removeClass("notmatch");
-		$(flippedCards[1]).addClass("open show match").removeClass("notmatch");
-		matchedCards++;
-		flippedCards.length = 0;
-	}else{
-		flippedCards.length = 0;
-	}
 
-}
-//cards do not match
-function noMatch(){
-	flippedCards.length = 0;
-}
 //rating
 var gameRating = function(){
   if (movesMade <= 11) {
@@ -96,9 +81,8 @@ var gameRating = function(){
   }
 }
 function displayCard(card){
-	let currentTarget = $(card);
-	currentTarget.addClass("show open");
-	currentTarget.css("pointer-events", "none");
+	let $currentTarget = $(card);
+	$currentTarget.addClass("show open").css("pointer-events", "none");
 }
 
 //add to List
@@ -106,16 +90,27 @@ function addCard(card){
 	flippedCards.push(this);
 }
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
+
+ // * set up the event listener for a card. If a card is clicked:
+ // *  - display the card's symbol (put this functionality in another function that you call from this one)
+ // *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+ // *  - if the list already has another card, check to see if the two cards match
+ // *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
+ function cardMatch(){
+		if(flippedCards[0].innerHTML === flippedCards[1].innerHTML){
+		matchedCards++;
+		 $(flippedCards).slice(0, 2).addClass('match');
+		flippedCards.length = 0;
+		}
+ }
+ // *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
+ function noMatch(){
+ 		$(flippedCards).slice(0, 2).addClass(' notmatch');
+		flippedCards.length = 0;
+ }
+ // *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+ // *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+
 
 
 $(document).on("click", "li", function(){
@@ -123,39 +118,16 @@ $(document).on("click", "li", function(){
 	//display card
 	displayCard(this);
 	addCard(this);
-	if(flippedCards.length >= 2){
-		cardsMatch(target);
-	}
-	// } else {
-	// 	noMatch();
-	// }
-	// gameRating();
-
+	console.log(flippedCards.length);
+	if(flippedCards.length === 2){
+		cardMatch();
+		} else{
+		noMatch();
+		}
+	movesMade++;
+	movesEl.text(movesMade);
+	winnerChickenDinner();
 });
 
-if(flippedCards[0] == flippedCards[1]){ console.log("true"); } else { console.log("not true"); }
-	// displayCard(currentTarget);
-	// if (currentTarget.hasClass('.card') || currentTarget.hasClass('open show')) {
- //           console.log((currentTarget).attr("class"));
- //           displayCard();
- //         } else {
- //            return;
- //         };
-
-// deck.addEventListener("click", function(e){
-//     let target = e.target; // Clicked element
-//     targetChild = target.children[0].getAttribute("class");
-
-// 	if(target.tagName === 'LI'){
-// 		cardInfo.prototype.methods.showCard(e);
-// 		cardInfo.prototype.methods.addToList(target);
-// 		console.log(target.firstChild.getAttribute("class"));
-// 		console.log(flippedCards);
-// 	}
-	// console.log(target);
-	// console.log(targetChild);
-	// console.log(flippedCards);
-	// console.log('target:', event.target.getAttribute('class'));
-// });
 
 
