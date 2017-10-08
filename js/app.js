@@ -159,7 +159,7 @@ $(document).on("click", "li", function(){
 		//if they actually do not match run this
 		if(flippedCards[0].innerHTML != flippedCards[1].innerHTML){
 		//this function will remove their classes turning them back over
-		noMatch(this);
+		setTimeout(function(){noMatch(this)},500);
 		//reset array
 		flippedCards.length = 0;
 		}else{
@@ -167,7 +167,6 @@ $(document).on("click", "li", function(){
 		cardMatch(this);
 		}
 	}
-	setTimeout(cardMatch(),2000)
 	movesMade++;
 	winnerChickenDinner();
 });
