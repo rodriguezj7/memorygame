@@ -105,10 +105,8 @@ function addCard(card){
 			$(flippedCards).slice(0, 2).addClass('match').removeClass('notmatch');
 			flippedCards.length = 0;
 		}
-	} else if(flippedCards.length === 3){
-		flippedCards.length = 0;
-		flippedCards.pop();
 	}
+
  }
  // *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
  function noMatch(){
@@ -134,7 +132,7 @@ $(document).on("click", "li", function(){
 		cardMatch();
 		}
 
-	 setTimeout(cardMatch(),2000)
+	setTimeout(cardMatch(),2000)
 	movesMade++;
 	winnerChickenDinner();
 });
