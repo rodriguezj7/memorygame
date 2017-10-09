@@ -103,6 +103,7 @@ function winnerChickenDinner(){
 			movesMade = 0;
 			//update moves element text with current counter
 			movesEl.text(movesMade);
+			matchedCards = 0;
 		});
 	}
 }
@@ -230,6 +231,6 @@ $(document).on("click", "li", function(){
 		startTimer();
 	}
 	movesEl.text(movesMade);
-	gameRating();
 	winnerChickenDinner();
+	gameRating();
 });

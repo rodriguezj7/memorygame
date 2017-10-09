@@ -174,9 +174,11 @@ h1 {
 }
 
 .restart:hover{
+    cursor: pointer;
     font-size: 18px;
     font-weight: bold;
 }
 .restart .play{
+    cursor: pointer;
     text-align: center;
 }
