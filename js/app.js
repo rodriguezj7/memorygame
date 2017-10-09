@@ -13,7 +13,8 @@ var repeat = $(".restart");
 let score = $(".stars");
 //star element
 let star = '<li><i class="fa fa-star"></i></li>';
-//moves made 
+let ratingStar = '<i class="fa fa-star"></i>';
+//moves made
 let movesEl = $(".moves");
 //array for storing and comparing cards
 let flippedCards = [];
@@ -24,6 +25,9 @@ let movesMade = 0;
 //currentTarget variable to be adjusted
 let cardOne;
 let cardTwo;
+let total;
+let timerInterval = null;
+let timerValue = 0;
 
 //build card
 var cardInfo = function(){
@@ -79,22 +83,62 @@ function shuffle(array) {
 }
 // winning game function
 function winnerChickenDinner(){
+	let myModal = $('.modal');
+	let close = $('.close');
+	let rating = $('.rating');
 	//run if the game counter condition is met
 	if(matchedCards === 8){
-		//log that the game is won
-		console.log("You won!");
+	    myModal.css('display', 'block');
+	    rating.html('Moves Taken: ' + movesMade + '</br>' + 'Overall Rating: ' + total + '</br>'+ 'Overall Time: ' + timerValue + ' seconds');
+	    stopTimer();
+	    rating.css('list-style', 'none');
+	// When the user clicks on <span> (x), close the modal
+		close.click(function() {
+		    myModal.css('display', 'none');
+		});
+		repeat.click(function(e){
+			myModal.css('display', 'none');
+			newBoard();
+			// reset moves made to 0
+			movesMade = 0;
+			//update moves element text with current counter
+			movesEl.text(movesMade);
+		});
 	}
+}
 
+function initialGame(){
+	let myModal = $('.modal2');
+	let close = $('.close');
+	//run if the game counter condition is met
+	if(matchedCards === 0){
+	    myModal.css('display', 'block');
+	// When the user clicks on <span> (x), close the modal
+		close.click(function() {
+		    myModal.css('display', 'none');
+		});
+		repeat.click(function(e){
+			myModal.css('display', 'none');
+			newBoard();
+			// reset moves made to 0
+			movesMade = 0;
+			//update moves element text with current counter
+			movesEl.text(movesMade);
+		});
+	}
 }
 
 //rating
 var gameRating = function(){
-  if (movesMade <= 11) {
-   score.append(star + star + star);
-  } else if (movesMade > 11 && movesMade < 16) {
-   score.append(star + star);
-  } else if (movesCount >= 25) {
-   score.append(star);
+  if (movesMade <= 14) {
+   score.html(star + star + star);
+   total = (ratingStar+ratingStar+ratingStar);
+  } else if (movesMade > 14 && movesMade < 19) {
+   score.html(star + star);
+   total = (ratingStar+ratingStar);
+  } else if (movesMade >= 25) {
+   score.html(star);
+   total = (ratingStar);
   }
 }
 //display card
@@ -109,6 +153,18 @@ function displayCard(card){
 function addCard(card){
 	//push the current card/target into the array for comparing
 	flippedCards.push(card);
+}
+function incrementTimer() {
+ timerValue++;
+ $('.timer').text(timerValue); // to add the value to the win modal and the screen
+}
+function startTimer() {
+ stopTimer(); // stoping the previous counting (if any)
+ timerInterval = setInterval(incrementTimer, 1000);
+}
+function stopTimer() {
+ clearInterval(timerInterval);
+ timerValue = 0;
 }
 
 
@@ -142,8 +198,7 @@ function addCard(card){
  // *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  // *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
 
-
-
+$(initialGame());
 $(document).on("click", "li", function(){
 	console.log(this);
 	//display card
@@ -156,19 +211,25 @@ $(document).on("click", "li", function(){
 	if(flippedCards.length > 1){
 		//make both cards notmatch 
 		$(flippedCards).slice(0, 2).addClass('notmatch');
+		$('li').css("pointer-events", "none");
 		//if they actually do not match run this
 		if(flippedCards[0].innerHTML != flippedCards[1].innerHTML){
 		//this function will remove their classes turning them back over
-		setTimeout(function(){noMatch(this)},500);
+		setTimeout(function(){noMatch(this)},1000);
 		//reset array
 		flippedCards.length = 0;
+		movesMade++;
 		}else{
 		//if the condition above is not true then this will run evaluating the matched cards
 		cardMatch(this);
+		$('li').css("pointer-events", "all");
+		movesMade++;
 		}
 	}
-	movesMade++;
+	if(movesMade == 1){
+		startTimer();
+	}
+	movesEl.text(movesMade);
+	gameRating();
 	winnerChickenDinner();
 });
-//populate grid without refresh
-cardInfo();
