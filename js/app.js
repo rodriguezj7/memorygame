@@ -105,7 +105,7 @@ function winnerChickenDinner(){
 			//update moves element text with current counter
 			movesEl.text(movesMade);
 			matchedCards = 0;
-			gameTime();
+			startTimer();
 		});
 	}
 }
@@ -232,9 +232,6 @@ $(document).on("click", "li", function(){
 		$('li').css("pointer-events", "all");
 		movesMade++;
 		}
-	}
-	if(movesMade == 1){
-		startTimer();
 	}
 	movesEl.text(movesMade);
 	winnerChickenDinner();
