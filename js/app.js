@@ -16,6 +16,7 @@ let star = '<li><i class="fa fa-star"></i></li>';
 let ratingStar = '<i class="fa fa-star"></i>';
 //moves made
 let movesEl = $(".moves");
+let timeEl = $('.time');
 //array for storing and comparing cards
 let flippedCards = [];
 // matched cards variable to evaluate total pairs
@@ -104,6 +105,7 @@ function winnerChickenDinner(){
 			//update moves element text with current counter
 			movesEl.text(movesMade);
 			matchedCards = 0;
+			gameTime();
 		});
 	}
 }
@@ -125,10 +127,14 @@ function initialGame(){
 			movesMade = 0;
 			//update moves element text with current counter
 			movesEl.text(movesMade);
+			startTimer();
 		});
 	}
 }
 
+let gameTime = function(){
+	timeEl.html(timerValue + ' seconds');
+}
 //rating
 var gameRating = function(){
   if (movesMade <= 14) {
@@ -157,7 +163,7 @@ function addCard(card){
 }
 function incrementTimer() {
  timerValue++;
- $('.timer').text(timerValue); // to add the value to the win modal and the screen
+ timeEl.text(timerValue); // to add the value to the win modal and the screen
 }
 function startTimer() {
  stopTimer(); // stoping the previous counting (if any)
