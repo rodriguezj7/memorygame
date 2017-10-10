@@ -182,3 +182,15 @@ h1 {
     cursor: pointer;
     text-align: center;
 }
+
+
+@media (max-width:680px){
+    .deck{
+        width: 400px;
+        min-height: 480px;
+    }
+    .deck .card {
+    height: 70px;
+    width: 70px;
+    }
+}
